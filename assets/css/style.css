@@ -477,7 +477,7 @@ p { color: var(--ink-muted); }
 .bento-item {
   background: var(--paper);
   border-radius: var(--radius-lg);
-  padding: 28px;
+  padding: 64px 28px 28px;
   border: 1px solid var(--line);
   display: flex; flex-direction: column; justify-content: flex-end;
   position: relative; overflow: hidden;
@@ -524,11 +524,11 @@ p { color: var(--ink-muted); }
 .bento-item.image p { color: rgba(255,255,255,.85); }
 
 @media (max-width: 980px) {
-  .bento { grid-template-columns: repeat(2, 1fr); grid-auto-rows: 180px; }
+  .bento { grid-template-columns: repeat(2, 1fr); grid-auto-rows: minmax(180px, auto); }
   .bento-item.lg, .bento-item.md, .bento-item.sm, .bento-item.xl { grid-column: span 2; grid-row: auto; }
 }
 @media (max-width: 540px) {
-  .bento { grid-template-columns: 1fr; }
+  .bento { grid-template-columns: 1fr; grid-auto-rows: minmax(180px, auto); }
   .bento-item.lg, .bento-item.md, .bento-item.sm, .bento-item.xl { grid-column: span 1; }
 }
 
@@ -960,7 +960,10 @@ p { color: var(--ink-muted); }
   background: linear-gradient(180deg, rgba(0,0,0,.1) 0%, rgba(0,0,0,.75) 100%);
   z-index: 0;
 }
-.bento-item.bg-img > * { position: relative; z-index: 1; }
+/* Sit above the gradient — but DON'T override .tag's absolute positioning */
+.bento-item.bg-img > h3,
+.bento-item.bg-img > p { position: relative; z-index: 1; }
+.bento-item.bg-img > .tag { z-index: 2; }
 .bento-item.bg-img h3 { color: #fff; }
 .bento-item.bg-img p { color: rgba(255,255,255,.88); }
 .bento-item.bg-img .tag { background: rgba(255,255,255,.2); color: #fff; }
