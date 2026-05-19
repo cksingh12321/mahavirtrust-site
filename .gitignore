@@ -1,0 +1,21 @@
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# Editors
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Vercel
+.vercel/
+
+# Node (defensive — no build here, but in case anyone adds it)
+node_modules/
+npm-debug.log*
+
+# Local logs / scratch
+*.log
+/tmp/
