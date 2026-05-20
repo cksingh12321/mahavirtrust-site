@@ -296,6 +296,79 @@
     </div>
   </section>
 
+  <!-- ===== Interest / lead form ===== -->
+  <section class="section" id="stay-in-touch" style="background: var(--paper);">
+    <div class="container">
+      <div class="interest-grid">
+        <div class="reveal">
+          <span class="eyebrow">Stay in touch</span>
+          <h2 class="mt-16">Want to follow our work in Madhubani?</h2>
+          <p class="lede mt-24">
+            Whether you'd like to volunteer, sponsor a child, partner with us as a CSR,
+            or simply receive our quarterly updates — share your details and one of our
+            trustees will be in touch within a week.
+          </p>
+          <ul class="interest-bullets mt-32">
+            <li><strong>No spam.</strong> Just a handful of letters a year from the field.</li>
+            <li><strong>No commitment.</strong> Telling us you're interested doesn't sign you up for anything.</li>
+            <li><strong>Reply in Hindi or English</strong> — we read both.</li>
+          </ul>
+        </div>
+
+        <div class="reveal">
+          <form class="interest-form" onsubmit="event.preventDefault(); this.querySelector('.form-success').hidden = false; this.querySelector('.form-fields').hidden = true;">
+            <div class="form-fields">
+              <div class="field">
+                <label for="iname">Your name *</label>
+                <input id="iname" name="name" type="text" placeholder="Sita Devi" required>
+              </div>
+              <div class="field-row">
+                <div class="field">
+                  <label for="iemail">Email *</label>
+                  <input id="iemail" name="email" type="email" placeholder="you@example.com" required>
+                </div>
+                <div class="field">
+                  <label for="iphone">Phone / WhatsApp</label>
+                  <input id="iphone" name="phone" type="tel" placeholder="+91 …">
+                </div>
+              </div>
+              <div class="field-row">
+                <div class="field">
+                  <label for="icity">City</label>
+                  <input id="icity" name="city" type="text" placeholder="Patna · Delhi · Mumbai…">
+                </div>
+                <div class="field">
+                  <label for="iinterest">I'm interested in</label>
+                  <select id="iinterest" name="interest">
+                    <option>Quarterly updates from the field</option>
+                    <option>Donating · sponsoring a child</option>
+                    <option>Volunteering</option>
+                    <option>CSR · corporate partnership</option>
+                    <option>Visiting Bishanpur</option>
+                    <option>Press · media</option>
+                    <option>Something else</option>
+                  </select>
+                </div>
+              </div>
+              <div class="field">
+                <label for="imsg">A short message (optional)</label>
+                <textarea id="imsg" name="message" placeholder="A few lines about how you'd like to help…"></textarea>
+              </div>
+              <button type="submit" class="btn btn-primary btn-lg" style="align-self: flex-start;">Send my details <span class="arrow">→</span></button>
+              <p class="muted" style="font-size: 0.82rem;">By submitting, you're agreeing to be contacted at the email or phone above. We never share details with anyone outside the trust.</p>
+            </div>
+
+            <div class="form-success" hidden>
+              <div class="success-mark">✓</div>
+              <h3 class="mt-16">Thank you — we've got your details.</h3>
+              <p class="mt-16">A trustee will reach out within a week. In the meantime, browse our <a href="gallery.html" style="color: var(--saffron-deep); text-decoration: underline;">photo gallery</a> or read <a href="about.html" style="color: var(--saffron-deep); text-decoration: underline;">Shri Mahavir Singh's story</a>.</p>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </section>
+
   <!-- ===== CTA banner ===== -->
   <section class="section">
     <div class="container reveal">
