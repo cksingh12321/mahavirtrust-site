@@ -111,7 +111,7 @@
   // Until the key is filled in, forms fall back to a mailto: link
   // (which works for users who have a default mail client).
   //
-  const WEB3FORMS_ACCESS_KEY = ''; // ← paste your Web3Forms key here
+  const WEB3FORMS_ACCESS_KEY = '09a92cb2-e609-4419-be21-6d7cb191e72a';
   const TRUST_EMAIL = 'msmtrustbishnupur@gmail.com';
 
   const labelFor = (name) => name
