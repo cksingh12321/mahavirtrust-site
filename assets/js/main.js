@@ -91,4 +91,43 @@
   document.querySelectorAll('[data-year]').forEach(el => {
     el.textContent = new Date().getFullYear();
   });
+
+  // ---- Mailto form helper ----
+  // Wires any <form data-mailto="address@example.com"> to open the user's
+  // default mail client pre-filled with their form data. Looks for an
+  // optional data-mailto-subject attr. After firing, shows the .form-success
+  // panel if present (and hides .form-fields).
+  const TRUST_EMAIL = 'msmtrustbishnupur@gmail.com';
+
+  const labelFor = (name) => name
+    .replace(/[-_]/g, ' ')
+    .replace(/\b\w/g, c => c.toUpperCase());
+
+  const buildMailtoBody = (form) => {
+    const lines = ['', '— from the mahavirtrust.org website —', ''];
+    const fields = form.querySelectorAll('input[name], select[name], textarea[name]');
+    fields.forEach(f => {
+      if (f.type === 'submit' || f.type === 'button') return;
+      const v = (f.value || '').trim();
+      if (!v) return;
+      lines.unshift(`${labelFor(f.name)}: ${v}`);
+    });
+    return lines.reverse().join('\n');
+  };
+
+  document.querySelectorAll('form[data-mailto]').forEach(form => {
+    form.addEventListener('submit', (e) => {
+      e.preventDefault();
+      const to = form.dataset.mailto || TRUST_EMAIL;
+      const subject = form.dataset.mailtoSubject || 'Hello from the mahavirtrust.org website';
+      const body = buildMailtoBody(form);
+      const url = `mailto:${to}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+      window.location.href = url;
+      // Reveal success state if the form has one
+      const success = form.querySelector('.form-success');
+      const fields = form.querySelector('.form-fields');
+      if (success) success.hidden = false;
+      if (fields) fields.hidden = true;
+    });
+  });
 })();

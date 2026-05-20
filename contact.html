@@ -67,7 +67,7 @@
             <span class="eyebrow">Send a message</span>
             <h2 class="mt-16" style="font-size: 1.8rem;">Drop us a line.</h2>
             <p class="muted mt-16">Questions about a donation, a CSR partnership, volunteering, or just want to say hello — anything is welcome.</p>
-            <form class="form mt-32" onsubmit="event.preventDefault(); alert('Thank you — we will be in touch within a week.');">
+            <form class="form mt-32" data-mailto="msmtrustbishnupur@gmail.com" data-mailto-subject="Message from mahavirtrust.org contact form">
               <div class="field-row">
                 <div class="field"><label for="cn">Your name</label><input id="cn" type="text" placeholder="Sita Devi" required></div>
                 <div class="field"><label for="ce">Email</label><input id="ce" type="email" placeholder="you@example.com" required></div>
@@ -272,7 +272,7 @@
         <div>
           <div class="footer-title">Stay Connected</div>
           <p style="color: rgba(250,246,238,.6); font-size: 0.92rem;">Quarterly updates from the field — new classrooms, health camps and stories from Madhubani.</p>
-          <form class="newsletter" onsubmit="event.preventDefault();">
+          <form class="newsletter" data-mailto="msmtrustbishnupur@gmail.com" data-mailto-subject="Subscribe me to Mahavir Trust updates">
             <input type="email" placeholder="you@example.com" required>
             <button type="submit">Join</button>
           </form>

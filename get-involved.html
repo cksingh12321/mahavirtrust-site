@@ -116,7 +116,7 @@
             <span class="eyebrow">Or — a custom amount</span>
             <h2 class="mt-16" style="color: var(--ink); font-size: 2rem;">Give what feels right.</h2>
             <p style="color: var(--ink-muted);">Pick an amount, choose where it goes, and we'll send you a photo update within 30 days from the village your gift reached.</p>
-            <form class="form mt-32" onsubmit="event.preventDefault();" style="max-width: 480px;">
+            <form class="form mt-32" data-mailto="msmtrustbishnupur@gmail.com" data-mailto-subject="Donation intent from mahavirtrust.org" style="max-width: 480px;">
               <div class="field-row">
                 <div class="field">
                   <label for="amt">Amount (₹)</label>
@@ -221,7 +221,7 @@
         <div class="contact-info-card" style="max-width: 720px; margin: 0 auto;">
           <h3 style="margin-bottom: 8px;">Apply to volunteer</h3>
           <p class="muted" style="margin-bottom: 24px;">Tell us a bit about yourself. We'll get back within a week.</p>
-          <form class="form" onsubmit="event.preventDefault(); alert('Thank you — we will be in touch.');">
+          <form class="form" data-mailto="msmtrustbishnupur@gmail.com" data-mailto-subject="Volunteer signup from mahavirtrust.org">
             <div class="field-row">
               <div class="field"><label for="vn">Full name</label><input id="vn" type="text" required></div>
               <div class="field"><label for="ve">Email</label><input id="ve" type="email" required></div>
@@ -315,7 +315,7 @@
         <div>
           <div class="footer-title">Stay Connected</div>
           <p style="color: rgba(250,246,238,.6); font-size: 0.92rem;">Quarterly updates from the field — new classrooms, health camps and stories from Madhubani.</p>
-          <form class="newsletter" onsubmit="event.preventDefault();">
+          <form class="newsletter" data-mailto="msmtrustbishnupur@gmail.com" data-mailto-subject="Subscribe me to Mahavir Trust updates">
             <input type="email" placeholder="you@example.com" required>
             <button type="submit">Join</button>
           </form>
