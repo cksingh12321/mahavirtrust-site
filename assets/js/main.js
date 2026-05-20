@@ -92,42 +92,106 @@
     el.textContent = new Date().getFullYear();
   });
 
-  // ---- Mailto form helper ----
-  // Wires any <form data-mailto="address@example.com"> to open the user's
-  // default mail client pre-filled with their form data. Looks for an
-  // optional data-mailto-subject attr. After firing, shows the .form-success
-  // panel if present (and hides .form-fields).
+  // ============================================================
+  // ---- Form submission via Web3Forms (https://web3forms.com) ----
+  // ============================================================
+  //
+  // HOW TO ACTIVATE:
+  // 1. Go to https://web3forms.com/  (30-second signup, free for
+  //    250 submissions/month, no credit card)
+  // 2. Enter email: msmtrustbishnupur@gmail.com
+  //    Click "Create your Access Key"
+  // 3. Confirm via the email Web3Forms sends you
+  // 4. Copy the access key shown on screen
+  // 5. Paste it between the quotes on the WEB3FORMS_ACCESS_KEY line
+  //    below
+  // 6. git commit + git push  →  Vercel auto-deploys in ~30 seconds
+  //    →  forms start working
+  //
+  // Until the key is filled in, forms fall back to a mailto: link
+  // (which works for users who have a default mail client).
+  //
+  const WEB3FORMS_ACCESS_KEY = ''; // ← paste your Web3Forms key here
   const TRUST_EMAIL = 'msmtrustbishnupur@gmail.com';
 
   const labelFor = (name) => name
     .replace(/[-_]/g, ' ')
     .replace(/\b\w/g, c => c.toUpperCase());
 
-  const buildMailtoBody = (form) => {
-    const lines = ['', '— from the mahavirtrust.org website —', ''];
-    const fields = form.querySelectorAll('input[name], select[name], textarea[name]');
-    fields.forEach(f => {
-      if (f.type === 'submit' || f.type === 'button') return;
-      const v = (f.value || '').trim();
-      if (!v) return;
-      lines.unshift(`${labelFor(f.name)}: ${v}`);
+  const showSuccess = (form, message) => {
+    const success = form.querySelector('.form-success');
+    const fields = form.querySelector('.form-fields');
+    if (success) {
+      success.hidden = false;
+      if (fields) fields.hidden = true;
+    } else {
+      alert(message || 'Thank you — your message has been sent.');
+    }
+  };
+
+  const fallbackMailto = (form, to, subject) => {
+    const lines = [];
+    new FormData(form).forEach((v, k) => {
+      if (k.startsWith('_')) return;
+      const sv = String(v).trim();
+      if (sv) lines.push(`${labelFor(k)}: ${sv}`);
     });
-    return lines.reverse().join('\n');
+    lines.push('', '— from the mahavirtrust.org website —');
+    const url = `mailto:${to}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(lines.join('\n'))}`;
+    window.location.href = url;
   };
 
   document.querySelectorAll('form[data-mailto]').forEach(form => {
-    form.addEventListener('submit', (e) => {
+    form.addEventListener('submit', async (e) => {
       e.preventDefault();
       const to = form.dataset.mailto || TRUST_EMAIL;
-      const subject = form.dataset.mailtoSubject || 'Hello from the mahavirtrust.org website';
-      const body = buildMailtoBody(form);
-      const url = `mailto:${to}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
-      window.location.href = url;
-      // Reveal success state if the form has one
-      const success = form.querySelector('.form-success');
-      const fields = form.querySelector('.form-fields');
-      if (success) success.hidden = false;
-      if (fields) fields.hidden = true;
+      const subject = form.dataset.mailtoSubject || 'Message from mahavirtrust.org';
+
+      const submitBtn = form.querySelector('button[type="submit"], button:not([type])');
+      const originalLabel = submitBtn?.innerHTML;
+      if (submitBtn) {
+        submitBtn.disabled = true;
+        submitBtn.innerHTML = 'Sending…';
+      }
+
+      // If no Web3Forms key is configured yet, skip the API and use mailto.
+      if (!WEB3FORMS_ACCESS_KEY) {
+        console.info('No WEB3FORMS_ACCESS_KEY set — using mailto fallback. See main.js for setup instructions.');
+        fallbackMailto(form, to, subject);
+        showSuccess(form);
+        return;
+      }
+
+      const data = new FormData(form);
+      data.set('access_key', WEB3FORMS_ACCESS_KEY);
+      data.set('subject', subject);
+      data.set('from_name', 'Mahavir Trust Website');
+      // Use the donor's email (if they provided one) as reply-to so you can
+      // reply directly from your inbox.
+      const donorEmail = data.get('email');
+      if (donorEmail) data.set('replyto', donorEmail);
+      data.set('_source', 'mahavirtrust.org');
+
+      try {
+        const res = await fetch('https://api.web3forms.com/submit', {
+          method: 'POST',
+          body: data,
+          headers: { 'Accept': 'application/json' }
+        });
+        const json = await res.json().catch(() => ({}));
+        if (!res.ok || json.success === false) {
+          throw new Error(json.message || ('HTTP ' + res.status));
+        }
+        showSuccess(form);
+      } catch (err) {
+        console.warn('Web3Forms failed, falling back to mailto:', err);
+        if (submitBtn) {
+          submitBtn.disabled = false;
+          submitBtn.innerHTML = originalLabel;
+        }
+        fallbackMailto(form, to, subject);
+        showSuccess(form);
+      }
     });
   });
 })();
