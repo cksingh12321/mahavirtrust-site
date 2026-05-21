@@ -2,6 +2,73 @@
 (function () {
   'use strict';
 
+  // ============================================================
+  // ---- Bilingual toggle: English ⇄ हिंदी ---------------------
+  // ============================================================
+  //
+  // HTML pattern used across the site:
+  //   <h2>
+  //     <span class="lang-en">English text</span>
+  //     <span class="lang-hi">हिंदी पाठ</span>
+  //   </h2>
+  //
+  // For attributes that can't take HTML children (placeholder, alt,
+  // title, value), use a single element with paired attributes:
+  //   <input data-i18n-attr="placeholder"
+  //          data-en="Your name" data-hi="आपका नाम">
+  //
+  // User's choice persists in localStorage as `mt_lang`.
+  // ============================================================
+  const LANG_KEY = 'mt_lang';
+  const supportedLangs = ['en', 'hi'];
+
+  const getInitialLang = () => {
+    const saved = localStorage.getItem(LANG_KEY);
+    if (saved && supportedLangs.includes(saved)) return saved;
+    // Default to English. (Could try navigator.language but English
+    // is safer for an Indian audience comfortable with both.)
+    return 'en';
+  };
+
+  const applyAttrTranslations = (lang) => {
+    document.querySelectorAll('[data-i18n-attr]').forEach(el => {
+      const attrs = el.dataset.i18nAttr.split(',').map(s => s.trim());
+      attrs.forEach(attr => {
+        const enKey = 'en' + attr.charAt(0).toUpperCase() + attr.slice(1);
+        const hiKey = 'hi' + attr.charAt(0).toUpperCase() + attr.slice(1);
+        // Per-attribute pair (data-en-placeholder / data-hi-placeholder)
+        let enVal = el.dataset[enKey];
+        let hiVal = el.dataset[hiKey];
+        // Fallback: simple data-en / data-hi (when only one attr per element)
+        if (!enVal && !hiVal) {
+          enVal = el.dataset.en;
+          hiVal = el.dataset.hi;
+        }
+        if (lang === 'en' && enVal != null) el.setAttribute(attr, enVal);
+        if (lang === 'hi' && hiVal != null) el.setAttribute(attr, hiVal);
+      });
+    });
+  };
+
+  const setLang = (lang) => {
+    if (!supportedLangs.includes(lang)) lang = 'en';
+    document.documentElement.lang = lang;
+    localStorage.setItem(LANG_KEY, lang);
+    applyAttrTranslations(lang);
+  };
+
+  // Apply saved language immediately (before paint, if possible)
+  setLang(getInitialLang());
+
+  // Wire all .lang-toggle buttons (header + anywhere else)
+  document.addEventListener('click', (e) => {
+    const btn = e.target.closest('.lang-toggle');
+    if (!btn) return;
+    e.preventDefault();
+    const next = document.documentElement.lang === 'en' ? 'hi' : 'en';
+    setLang(next);
+  });
+
   // Mobile menu
   const toggle = document.querySelector('.menu-toggle');
   const header = document.querySelector('.site-header');
