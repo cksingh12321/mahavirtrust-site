@@ -1088,11 +1088,12 @@ p { color: var(--ink-muted); }
 .reveal.in { opacity: 1; transform: translateY(0); }
 
 /* ---------- Bilingual (i18n) ---------- */
-/* Pattern: <span class="lang-en">English</span><span class="lang-hi">हिंदी</span> */
-html[lang="en"] .lang-hi,
-html[lang="hi"] .lang-en {
-  display: none !important;
-}
+/* Pattern: <span class="lang-en">English</span><span class="lang-hi">हिंदी</span>
+   Default: English shown, Hindi hidden. Only when html[lang="hi"] is set
+   (via the toggle button) do we flip. */
+.lang-hi { display: none !important; }
+html[lang="hi"] .lang-hi { display: inline !important; }
+html[lang="hi"] .lang-en { display: none !important; }
 /* Hindi-script-specific tweaks — Noto Sans Devanagari needs a touch more
    line-height and slightly smaller display sizing to feel right. */
 html[lang="hi"] {

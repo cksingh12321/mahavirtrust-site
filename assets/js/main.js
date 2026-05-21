@@ -25,8 +25,7 @@
   const getInitialLang = () => {
     const saved = localStorage.getItem(LANG_KEY);
     if (saved && supportedLangs.includes(saved)) return saved;
-    // Default to English. (Could try navigator.language but English
-    // is safer for an Indian audience comfortable with both.)
+    // Default to English. User toggles to Hindi explicitly.
     return 'en';
   };
 

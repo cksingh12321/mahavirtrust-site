@@ -11,6 +11,12 @@
   <link rel="stylesheet" href="assets/css/style.css">
   <link rel="stylesheet" href="assets/css/gallery-extra.css">
   <link rel="icon" type="image/png" href="assets/img/favicon.png">
+  <style id="i18n-failsafe">
+    /* Default to English — works even before external CSS loads or with stale cache */
+    .lang-hi { display: none !important; }
+    html[lang="hi"] .lang-hi { display: inline !important; }
+    html[lang="hi"] .lang-en { display: none !important; }
+  </style>
 </head>
 <body>
 
