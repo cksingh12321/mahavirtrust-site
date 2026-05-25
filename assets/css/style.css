@@ -1111,6 +1111,116 @@ html[lang="hi"] .namesake-name {
   font-family: 'Noto Serif Devanagari', 'Tiro Devanagari Hindi', serif;
 }
 
+/* ---------- Press Coverage cards ---------- */
+.press-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  gap: 24px;
+}
+.press-card {
+  background: var(--paper);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  display: flex; flex-direction: column;
+  transition: transform .3s var(--ease), box-shadow .3s var(--ease);
+}
+.press-card:hover { transform: translateY(-3px); box-shadow: var(--shadow-md); }
+
+.press-clipping {
+  aspect-ratio: 4 / 3;
+  background: linear-gradient(135deg, #e8e0cf 0%, #b8a87c 100%);
+  position: relative;
+  overflow: hidden;
+}
+.press-clipping img {
+  position: absolute; inset: 0;
+  width: 100%; height: 100%;
+  object-fit: cover;
+}
+.press-clipping .ph-fallback {
+  position: absolute; inset: 0;
+  display: grid; place-items: center;
+  color: rgba(255,255,255,.85);
+  font-family: var(--serif);
+  font-style: italic;
+  font-size: 1rem;
+  text-align: center;
+  padding: 20px;
+  z-index: 0;
+}
+
+.press-body {
+  padding: 22px 24px 24px;
+  display: flex; flex-direction: column;
+  flex: 1;
+}
+.press-meta {
+  display: flex; align-items: center; gap: 8px;
+  font-size: 0.78rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--saffron-deep);
+  font-weight: 600;
+}
+.press-meta .pub-dot {
+  width: 4px; height: 4px;
+  border-radius: 50%;
+  background: var(--ink-soft);
+  display: inline-block;
+}
+.press-title {
+  font-family: var(--serif);
+  font-size: 1.2rem;
+  font-weight: 600;
+  line-height: 1.3;
+  margin-top: 10px;
+  color: var(--ink);
+}
+.press-excerpt {
+  font-size: 0.92rem;
+  line-height: 1.55;
+  color: var(--ink-muted);
+  margin-top: 10px;
+}
+.press-link {
+  display: inline-flex; align-items: center; gap: 6px;
+  font-size: 0.88rem;
+  font-weight: 600;
+  color: var(--ink);
+  margin-top: auto;
+  padding-top: 16px;
+}
+.press-link .arrow { transition: transform .25s var(--ease); }
+.press-card:hover .press-link .arrow { transform: translateX(4px); }
+
+/* Hindi cards get Devanagari fonts everywhere */
+.press-card[lang="hi"] .press-title { font-family: 'Noto Serif Devanagari', var(--serif); }
+.press-card[lang="hi"] .press-meta,
+.press-card[lang="hi"] .press-excerpt,
+.press-card[lang="hi"] .press-link { font-family: 'Noto Sans Devanagari', var(--sans); }
+
+/* Section break between EN and HI press */
+.press-section + .press-section { margin-top: 24px; padding-top: 80px; border-top: 1px solid var(--line); }
+
+/* Add-an-entry hint box */
+.add-entry-hint {
+  background: var(--cream);
+  border: 1px dashed var(--line-strong);
+  border-radius: var(--radius);
+  padding: 18px 22px;
+  font-size: 0.88rem;
+  color: var(--ink-soft);
+  margin-top: 28px;
+}
+.add-entry-hint strong { color: var(--ink); }
+.add-entry-hint code {
+  background: rgba(14,14,14,.06);
+  padding: 2px 6px;
+  border-radius: 4px;
+  font-size: 0.86em;
+}
+
 /* ---------- Bilingual (i18n) ---------- */
 /* Pattern: <span class="lang-en">English</span><span class="lang-hi">हिंदी</span>
    Default: English shown, Hindi hidden. Only when html[lang="hi"] is set
