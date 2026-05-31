@@ -1,0 +1,108 @@
+# ============================================================
+# Decap CMS configuration
+# Edits commit straight to the GitHub repo on the `main` branch.
+# Vercel auto-deploys every commit, so changes go live within
+# ~30 seconds of clicking Publish.
+# ============================================================
+
+backend:
+  name: github
+  repo: cksingh12321/mahavirtrust-site
+  branch: main
+  base_url: https://www.mahavirtrust.org
+  auth_endpoint: api/auth
+
+# Where uploaded images go (relative to repo root)
+media_folder: "assets/img/uploads"
+# Public-facing URL prefix for the uploaded images
+public_folder: "/assets/img/uploads"
+
+site_url: https://www.mahavirtrust.org
+
+logo_url: /assets/img/favicon.png
+
+# ============================================================
+# Content collections — News / Blog / Press
+# Each is a single JSON file with an "entries" array
+# Decap edits the array via a friendly form, no JSON knowledge needed
+# ============================================================
+collections:
+
+  - name: "news"
+    label: "Trust News"
+    label_singular: "News item"
+    file: "content/news.json"
+    format: "json"
+    description: "Official announcements, milestones, event reports. Shown on /news.html"
+    files:
+      - file: "content/news.json"
+        label: "News items"
+        name: "news"
+        format: "json"
+        fields:
+          - label: "Entries"
+            name: "entries"
+            widget: "list"
+            label_singular: "News item"
+            summary: "{{fields.date}} — {{fields.title}}"
+            fields:
+              - { label: "Language", name: "lang", widget: "select", options: ["en", "hi"], default: "en" }
+              - { label: "Category", name: "category", widget: "select", options: ["event", "milestone", "story"], default: "event" }
+              - { label: "Date", name: "date", widget: "datetime", date_format: "YYYY-MM-DD", time_format: false, format: "YYYY-MM-DD" }
+              - { label: "Headline", name: "title", widget: "string" }
+              - { label: "Short excerpt (2–3 lines, shown on card)", name: "excerpt", widget: "text" }
+              - { label: "Hero photo (optional)", name: "image", widget: "image", required: false }
+              - { label: "Full body (optional, expandable on card)", name: "body", widget: "markdown", required: false }
+
+  - name: "blog"
+    label: "Blog"
+    label_singular: "Blog post"
+    file: "content/blog.json"
+    format: "json"
+    description: "Long-form essays and field notes. Shown on /blog.html"
+    files:
+      - file: "content/blog.json"
+        label: "Blog posts"
+        name: "blog"
+        format: "json"
+        fields:
+          - label: "Entries"
+            name: "entries"
+            widget: "list"
+            label_singular: "Blog post"
+            summary: "{{fields.date}} — {{fields.title}}"
+            fields:
+              - { label: "Language", name: "lang", widget: "select", options: ["en", "hi"], default: "en" }
+              - { label: "Kind", name: "category", widget: "select", options: ["essay", "field-note", "story"], default: "essay" }
+              - { label: "Date", name: "date", widget: "datetime", date_format: "YYYY-MM-DD", time_format: false, format: "YYYY-MM-DD" }
+              - { label: "Author", name: "author", widget: "string", default: "Dr. Binod Kumar Singh" }
+              - { label: "Headline", name: "title", widget: "string" }
+              - { label: "Short excerpt (2–3 lines)", name: "excerpt", widget: "text" }
+              - { label: "Hero photo (optional)", name: "image", widget: "image", required: false }
+              - { label: "Full essay body", name: "body", widget: "markdown" }
+
+  - name: "press"
+    label: "Press Coverage"
+    label_singular: "Press article"
+    file: "content/press.json"
+    format: "json"
+    description: "Newspaper / magazine coverage of the Trust. Shown on /press.html"
+    files:
+      - file: "content/press.json"
+        label: "Press articles"
+        name: "press"
+        format: "json"
+        fields:
+          - label: "Entries"
+            name: "entries"
+            widget: "list"
+            label_singular: "Press article"
+            summary: "{{fields.date}} — {{fields.publication}}: {{fields.title}}"
+            fields:
+              - { label: "Language", name: "lang", widget: "select", options: ["en", "hi"], default: "en" }
+              - { label: "Date", name: "date", widget: "datetime", date_format: "YYYY-MM-DD", time_format: false, format: "YYYY-MM-DD" }
+              - { label: "Publication", name: "publication", widget: "string", hint: "e.g. The Times of India · Patna" }
+              - { label: "Headline", name: "title", widget: "string" }
+              - { label: "Excerpt / pull-quote", name: "excerpt", widget: "text" }
+              - { label: "Online article URL (optional)", name: "url", widget: "string", required: false }
+              - { label: "Clipping photo (optional)", name: "image", widget: "image", required: false }

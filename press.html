@@ -71,7 +71,7 @@
         <h2><span class="lang-en">Coverage in English-language publications.</span><span class="lang-hi">अंग्रेज़ी समाचार-पत्रों में कवरेज।</span></h2>
       </div>
 
-      <div class="press-grid reveal">
+      <div class="press-grid reveal" id="press-grid">
         <!--
           ============================================================
           ENGLISH PRESS CARDS  —  add a new one by copy-pasting the
@@ -320,6 +320,10 @@
     <a href="get-involved.html#donate" class="btn btn-primary"><span class="lang-en">Donate</span><span class="lang-hi">दान करें</span> <span class="arrow">→</span></a>
   </div>
 
+  <script>
+    window.CMS_CONFIG = { type: 'press', source: '/content/press.json', gridSelector: '#press-grid' };
+  </script>
   <script src="assets/js/main.js?v=3"></script>
+  <script src="assets/js/content-loader.js?v=1"></script>
 </body>
 </html>

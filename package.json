@@ -1,0 +1,9 @@
+{
+  "name": "mahavirtrust-site",
+  "version": "1.0.0",
+  "description": "Mahavir Singh Memorial Trust — official website. Static HTML + Vercel serverless OAuth proxy for Decap CMS.",
+  "private": true,
+  "engines": {
+    "node": ">=18"
+  }
+}
