@@ -6,13 +6,13 @@
   <meta name="robots" content="noindex">
   <title>Content Admin — Mahavir Singh Memorial Trust</title>
   <link rel="icon" type="image/png" href="/assets/img/favicon.png">
+
+  <!-- Tell Decap CMS exactly where the config lives. Absolute path
+       avoids issues when the user lands on /admin vs /admin/. -->
+  <link href="/admin/config.yml" type="text/yaml" rel="cms-config-url">
 </head>
 <body>
-  <!-- Decap CMS (formerly Netlify CMS) — loads its UI from CDN -->
-  <script src="https://unpkg.com/decap-cms@^3.0.0/dist/decap-cms.js"></script>
-  <script>
-    // OAuth proxy lives at /api/auth and /api/callback on this same domain.
-    // CMS.registerBackend('github', GitHubBackend);  // built-in
-  </script>
+  <!-- Decap CMS — UI loaded from CDN -->
+  <script src="https://unpkg.com/decap-cms@^3.8.4/dist/decap-cms.js"></script>
 </body>
 </html>
