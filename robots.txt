@@ -1,0 +1,13 @@
+# Mahavir Singh Memorial Trust — robots.txt
+# https://www.mahavirtrust.org/
+
+User-agent: *
+Allow: /
+
+# Keep the CMS admin and serverless functions out of search indexes
+Disallow: /admin/
+Disallow: /api/
+Disallow: /content/
+
+# Point crawlers at our sitemap
+Sitemap: https://www.mahavirtrust.org/sitemap.xml
