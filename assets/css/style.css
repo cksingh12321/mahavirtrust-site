@@ -1453,3 +1453,25 @@ html[lang="hi"] .lang-toggle .lang-hi-label {
   .top-bar-label { display: none; }
   .social-buttons--sm .social-btn { --size: 28px; }
 }
+
+/* ============================================================
+   Social buttons inside the white header pill
+   ============================================================ */
+.social-buttons--header {
+  margin-right: 6px;
+  padding-right: 10px;
+  border-right: 1px solid rgba(14, 14, 14, 0.1);
+  gap: 6px;
+}
+.social-buttons--header .social-btn {
+  --size: 28px;
+}
+.social-buttons--header .social-btn svg {
+  width: 14px;
+  height: 14px;
+}
+
+/* Hide header socials below tablet so the mobile menu doesn't crowd */
+@media (max-width: 960px) {
+  .social-buttons--header { display: none !important; }
+}
