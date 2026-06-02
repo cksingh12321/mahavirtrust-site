@@ -1354,3 +1354,102 @@ html[lang="hi"] .lang-toggle .lang-hi-label {
   .hide-mobile { display: none; }
   .show-mobile { display: initial; }
 }
+
+/* ============================================================
+   Top utility bar + social buttons
+   ============================================================ */
+.top-bar {
+  background: var(--ink, #0E0E0E);
+  color: rgba(250, 246, 238, 0.85);
+  padding: 8px 0;
+  font-size: 0.85rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+}
+.top-bar-inner {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 14px;
+}
+.top-bar-label {
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  font-weight: 600;
+  color: rgba(250, 246, 238, 0.55);
+  font-size: 0.72rem;
+}
+
+/* Social buttons — base */
+.social-buttons {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+.social-btn {
+  --size: 36px;
+  width: var(--size);
+  height: var(--size);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  color: #fff;
+  text-decoration: none;
+  background: rgba(255, 255, 255, 0.1);
+  transition: transform 0.22s ease, box-shadow 0.22s ease, filter 0.22s ease;
+  position: relative;
+  overflow: hidden;
+}
+.social-btn svg {
+  width: calc(var(--size) * 0.5);
+  height: calc(var(--size) * 0.5);
+  display: block;
+}
+.social-btn:hover,
+.social-btn:focus-visible {
+  transform: translateY(-2px) scale(1.05);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.28);
+  filter: saturate(1.15);
+  outline: none;
+}
+
+/* Brand colours */
+.social-btn--linkedin {
+  background: #0A66C2;
+}
+.social-btn--instagram {
+  background: radial-gradient(
+    circle at 30% 110%,
+    #FFDD55 0%,
+    #FF6E3F 18%,
+    #E1306C 42%,
+    #C13584 60%,
+    #833AB4 78%,
+    #405DE6 100%
+  );
+}
+.social-btn--youtube {
+  background: #FF0000;
+}
+
+/* Size variants */
+.social-buttons--sm .social-btn { --size: 30px; }
+.social-buttons--lg .social-btn { --size: 42px; }
+
+/* Footer socials — keep wrapper class working with new structure */
+.site-footer .socials {
+  margin-top: 14px;
+  display: block;
+  font-size: 0; /* kill any old text */
+}
+.site-footer .socials .social-buttons {
+  font-size: 1rem;
+}
+
+/* Mobile */
+@media (max-width: 700px) {
+  .top-bar { padding: 6px 0; }
+  .top-bar-inner { justify-content: center; gap: 10px; }
+  .top-bar-label { display: none; }
+  .social-buttons--sm .social-btn { --size: 28px; }
+}
