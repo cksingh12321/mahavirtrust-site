@@ -45,8 +45,11 @@ export default async function handler(req, res) {
     return;
   }
 
-  const adminEmail = process.env.ADMIN_EMAIL;
-  const adminPassword = process.env.ADMIN_PASSWORD;
+  // .trim() guards against a trailing space / newline accidentally
+  // pasted into the Vercel env var, which would otherwise make every
+  // login fail with a confusing "invalid password".
+  const adminEmail = (process.env.ADMIN_EMAIL || "").trim();
+  const adminPassword = (process.env.ADMIN_PASSWORD || "").trim();
   const secret = process.env.SESSION_SECRET;
 
   if (!adminEmail || !adminPassword || !secret) {
@@ -59,7 +62,7 @@ export default async function handler(req, res) {
 
   const body = await readBody(req);
   const email = String(body.email || "").trim().toLowerCase();
-  const password = String(body.password || "");
+  const password = String(body.password || "").trim();
 
   // Two compares in constant time so we don't leak which field was wrong
   const emailOk = timingSafeStringEqual(email, adminEmail.toLowerCase());
