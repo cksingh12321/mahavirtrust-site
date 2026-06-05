@@ -6,13 +6,48 @@
   <meta name="robots" content="noindex">
   <title>Content Admin — Mahavir Singh Memorial Trust</title>
   <link rel="icon" type="image/png" href="/assets/img/favicon.png">
-
-  <!-- Tell Decap CMS exactly where the config lives. Absolute path
-       avoids issues when the user lands on /admin vs /admin/. -->
-  <link href="/admin/config.yml" type="text/yaml" rel="cms-config-url">
+  <link rel="stylesheet" href="/admin/admin.css?v=1">
 </head>
 <body>
-  <!-- Decap CMS — UI loaded from CDN -->
-  <script src="https://unpkg.com/decap-cms@^3.8.4/dist/decap-cms.js"></script>
+
+  <div class="app-shell" id="app" hidden>
+    <header class="app-header">
+      <a href="/" class="brand">
+        <img src="/assets/img/favicon.png" alt="">
+        <span>Mahavir Trust CMS</span>
+      </a>
+      <div class="app-meta">
+        <span class="who" id="who"></span>
+        <button id="logout-btn" type="button">Sign out</button>
+      </div>
+    </header>
+
+    <nav class="tabs" role="tablist">
+      <button data-tab="news" class="active" role="tab">Trust News</button>
+      <button data-tab="blog" role="tab">Blog</button>
+      <button data-tab="press" role="tab">Press</button>
+    </nav>
+
+    <main class="app-body">
+      <div class="toolbar">
+        <div>
+          <h2 id="tab-title">Trust News</h2>
+          <p id="tab-sub">Official announcements, milestones and event reports.</p>
+        </div>
+        <div>
+          <button class="btn btn-ghost" id="reload-btn" type="button">Reload</button>
+          <button class="btn btn-saffron" id="add-btn" type="button">+ Add entry</button>
+        </div>
+      </div>
+
+      <div id="entries" class="entry-list">
+        <div class="spinner-block">Loading…</div>
+      </div>
+    </main>
+  </div>
+
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+  <script src="/admin/dashboard.js?v=1"></script>
 </body>
 </html>

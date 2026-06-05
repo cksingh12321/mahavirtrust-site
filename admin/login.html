@@ -1,0 +1,79 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex">
+  <title>Sign in — Mahavir Trust CMS</title>
+  <link rel="icon" type="image/png" href="/assets/img/favicon.png">
+  <link rel="stylesheet" href="/admin/admin.css?v=1">
+</head>
+<body class="auth-shell">
+
+  <main class="auth-card">
+    <a class="auth-brand" href="/">
+      <img src="/assets/img/favicon.png" alt="">
+      <span>
+        <strong>Mahavir Singh Memorial Trust</strong>
+        <small>Content admin</small>
+      </span>
+    </a>
+
+    <h1>Sign in</h1>
+    <p class="auth-sub">Editor access to news, blog and press coverage.</p>
+
+    <form id="login-form" novalidate>
+      <label>
+        <span>Email</span>
+        <input type="email" name="email" autocomplete="username" required autofocus>
+      </label>
+      <label>
+        <span>Password</span>
+        <input type="password" name="password" autocomplete="current-password" required>
+      </label>
+      <button type="submit" class="btn-primary">
+        <span class="btn-label">Sign in</span>
+        <span class="btn-spinner" aria-hidden="true"></span>
+      </button>
+      <p class="auth-error" id="error" role="alert"></p>
+    </form>
+
+    <p class="auth-footer">
+      <a href="/">← Back to site</a>
+    </p>
+  </main>
+
+  <script>
+    const form = document.getElementById("login-form");
+    const errEl = document.getElementById("error");
+    const btn = form.querySelector("button");
+
+    form.addEventListener("submit", async (e) => {
+      e.preventDefault();
+      errEl.textContent = "";
+      btn.classList.add("is-loading");
+      btn.disabled = true;
+
+      const data = Object.fromEntries(new FormData(form).entries());
+      try {
+        const r = await fetch("/api/admin-login", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(data),
+        });
+        if (r.status === 204) {
+          location.replace("/admin/");
+          return;
+        }
+        const body = await r.json().catch(() => ({}));
+        errEl.textContent = body.error || `Sign-in failed (${r.status})`;
+      } catch (err) {
+        errEl.textContent = "Network error. Try again.";
+      } finally {
+        btn.classList.remove("is-loading");
+        btn.disabled = false;
+      }
+    });
+  </script>
+</body>
+</html>
