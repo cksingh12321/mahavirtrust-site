@@ -24,6 +24,16 @@
       "permanent": true
     },
     {
+      "source": "/Home",
+      "destination": "https://www.mahavirtrust.org/",
+      "permanent": true
+    },
+    {
+      "source": "/home",
+      "destination": "https://www.mahavirtrust.org/",
+      "permanent": true
+    },
+    {
       "source": "/(.*)",
       "has": [
         { "type": "host", "value": "mahavirtrust.org" }
