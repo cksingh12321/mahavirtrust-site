@@ -4,6 +4,26 @@
   "trailingSlash": false,
   "redirects": [
     {
+      "source": "/about-us",
+      "destination": "https://www.mahavirtrust.org/about.html",
+      "permanent": true
+    },
+    {
+      "source": "/about-us/",
+      "destination": "https://www.mahavirtrust.org/about.html",
+      "permanent": true
+    },
+    {
+      "source": "/contact-us",
+      "destination": "https://www.mahavirtrust.org/contact.html",
+      "permanent": true
+    },
+    {
+      "source": "/contact-us/",
+      "destination": "https://www.mahavirtrust.org/contact.html",
+      "permanent": true
+    },
+    {
       "source": "/(.*)",
       "has": [
         { "type": "host", "value": "mahavirtrust.org" }
