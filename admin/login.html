@@ -7,6 +7,25 @@
   <title>Sign in — Mahavir Trust CMS</title>
   <link rel="icon" type="image/png" href="/assets/img/favicon.png">
   <link rel="stylesheet" href="/admin/admin.css?v=1">
+  <style>
+    .pw-wrap { position: relative; }
+    .pw-wrap input { padding-right: 70px; }
+    .pw-toggle {
+      position: absolute;
+      top: 50%;
+      right: 6px;
+      transform: translateY(-50%);
+      background: transparent;
+      border: none;
+      color: #c25c12;
+      font-size: 0.8rem;
+      font-weight: 700;
+      cursor: pointer;
+      padding: 6px 8px;
+      font-family: inherit;
+    }
+    .pw-toggle:hover { color: #E76F1A; text-decoration: underline; }
+  </style>
 </head>
 <body class="auth-shell">
 
@@ -29,7 +48,10 @@
       </label>
       <label>
         <span>Password</span>
-        <input type="password" name="password" autocomplete="current-password" required>
+        <div class="pw-wrap">
+          <input type="password" name="password" id="pw" autocomplete="current-password" required>
+          <button type="button" class="pw-toggle" id="pw-toggle" aria-label="Show password">Show</button>
+        </div>
       </label>
       <button type="submit" class="btn-primary">
         <span class="btn-label">Sign in</span>
@@ -46,7 +68,17 @@
   <script>
     const form = document.getElementById("login-form");
     const errEl = document.getElementById("error");
-    const btn = form.querySelector("button");
+    const btn = form.querySelector('button[type="submit"]');
+
+    // Show / hide password so you can confirm exactly what you typed
+    const pw = document.getElementById("pw");
+    const pwToggle = document.getElementById("pw-toggle");
+    pwToggle.addEventListener("click", () => {
+      const reveal = pw.type === "password";
+      pw.type = reveal ? "text" : "password";
+      pwToggle.textContent = reveal ? "Hide" : "Show";
+      pw.focus();
+    });
 
     form.addEventListener("submit", async (e) => {
       e.preventDefault();
