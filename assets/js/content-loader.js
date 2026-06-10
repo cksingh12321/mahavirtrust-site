@@ -149,7 +149,11 @@
   fetch(cfg.source, { cache: 'no-store' })
     .then((r) => (r.ok ? r.json() : { entries: [] }))
     .then((data) => {
-      const entries = (data && data.entries) || [];
+      // Drafts (status === 'draft') are committed to the JSON but never
+      // shown on the public site — only published entries render.
+      const entries = ((data && data.entries) || []).filter(
+        (e) => e && e.status !== 'draft'
+      );
       if (!entries.length) return;
 
       // Sort newest-first by `date`

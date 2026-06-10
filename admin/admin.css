@@ -339,6 +339,20 @@ a:hover { color: var(--saffron); }
 .entry.is-open .entry-body { display: block; }
 .entry.is-new { border-color: var(--saffron); }
 
+.badge {
+  display: inline-block;
+  font-size: 0.66rem;
+  font-weight: 700;
+  padding: 2px 8px;
+  border-radius: 999px;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+  vertical-align: middle;
+  margin-right: 4px;
+}
+.badge-draft { background: #fef3c7; color: #92400e; }
+.badge-pub { background: var(--success-bg); color: var(--success); }
+
 .field {
   margin-bottom: 14px;
 }

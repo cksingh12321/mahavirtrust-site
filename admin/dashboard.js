@@ -264,9 +264,20 @@
       .join("")}</div>`;
   }
 
+  // An entry counts as a draft only if explicitly marked. Older entries
+  // (and anything not "draft") are treated as published, so existing live
+  // content keeps showing.
+  function isDraft(entry) {
+    return entry && entry.status === "draft";
+  }
+
   function cardHtml(entry, index, schema) {
     const isNew = index === null;
     const title = entry.title || (isNew ? "New entry" : "Untitled");
+    const draft = isNew ? true : isDraft(entry);
+    const badge = draft
+      ? '<span class="badge badge-draft">Draft</span>'
+      : '<span class="badge badge-pub">Published</span>';
     const metaBits = [];
     if (entry.date) metaBits.push(esc(fmtDate(entry.date)));
     if (schema.key === "press" && entry.publication)
@@ -280,7 +291,7 @@
       <div class="entry-head">
         <div class="entry-title">
           <h3>${esc(title)}</h3>
-          <div class="entry-meta">${metaBits.join(" · ") || "No date set"}</div>
+          <div class="entry-meta">${badge} ${metaBits.join(" · ") || "No date set"}</div>
         </div>
         <div class="entry-actions">
           <button class="btn btn-danger btn-del" type="button">${
@@ -291,7 +302,10 @@
       <div class="entry-body">
         ${rows}
         <div class="entry-save-row">
-          <button class="btn btn-saffron btn-save" type="button">Save entry</button>
+          <button class="btn btn-ghost btn-save-draft" type="button">Save draft</button>
+          <button class="btn btn-saffron btn-publish" type="button">${
+            draft ? "Publish" : "Update (live)"
+          }</button>
         </div>
       </div>
     </div>`;
@@ -358,8 +372,8 @@
       const data = await r.json().catch(() => ({}));
       if (!r.ok) throw new Error(data.error || `Save failed (${r.status})`);
       render();
-      const commit = data.commit ? `commit ${data.commit} · ` : "";
-      toast(`${verb} · ${commit}live in ~30s`, "success");
+      const commit = data.commit ? ` · ${data.commit}` : "";
+      toast(`${verb}${commit}`, "success");
     } catch (e) {
       toast(e.message || "Save failed", "error");
     } finally {
@@ -373,7 +387,7 @@
   }
 
   // ---- actions -----------------------------------------------------
-  async function saveEntry(cardEl) {
+  async function saveEntry(cardEl, status) {
     const schema = SCHEMAS[state.tab];
     const obj = readCard(cardEl, schema);
     if (!obj.title) {
@@ -384,13 +398,18 @@
       toast("A date is required", "error");
       return;
     }
+    obj.status = status === "draft" ? "draft" : "published";
     if (cardEl.dataset.new === "1") {
       state.entries.unshift(obj);
     } else {
       const i = Number(cardEl.dataset.index);
       state.entries[i] = obj;
     }
-    await persist("Saved");
+    const verb =
+      obj.status === "draft"
+        ? "Saved as draft — hidden from the site"
+        : "Published — live in ~30s";
+    await persist(verb);
   }
 
   async function deleteEntry(cardEl) {
@@ -416,6 +435,7 @@
       if (f.default) blank[f.name] = f.default;
     });
     blank.date = todayISO();
+    blank.status = "draft";
     const empty = entriesEl.querySelector(".empty");
     if (empty) entriesEl.innerHTML = "";
     entriesEl.insertAdjacentHTML("afterbegin", cardHtml(blank, null, schema));
@@ -453,8 +473,12 @@
       deleteEntry(card);
       return;
     }
-    if (ev.target.closest(".btn-save")) {
-      saveEntry(card);
+    if (ev.target.closest(".btn-save-draft")) {
+      saveEntry(card, "draft");
+      return;
+    }
+    if (ev.target.closest(".btn-publish")) {
+      saveEntry(card, "published");
       return;
     }
     if (ev.target.closest(".entry-head")) {
