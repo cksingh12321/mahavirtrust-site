@@ -98,17 +98,7 @@
           return;
         }
         const body = await r.json().catch(() => ({}));
-        // TEMPORARY diagnostic: pinpoint which field is wrong
-        if (body.emailOk === false && body.passOk === true) {
-          errEl.textContent = "✗ Email doesn't match ADMIN_EMAIL in Vercel.";
-        } else if (body.passOk === false && body.emailOk === true) {
-          errEl.textContent = "✗ Password doesn't match ADMIN_PASSWORD in Vercel.";
-        } else if (body.emailOk === false && body.passOk === false) {
-          errEl.textContent =
-            "✗ Both email AND password mismatch — or the latest env vars haven't been redeployed.";
-        } else {
-          errEl.textContent = body.error || `Sign-in failed (${r.status})`;
-        }
+        errEl.textContent = body.error || `Sign-in failed (${r.status})`;
       } catch (err) {
         errEl.textContent = "Network error. Try again.";
       } finally {

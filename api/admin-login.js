@@ -69,9 +69,7 @@ export default async function handler(req, res) {
   const passOk = timingSafeStringEqual(password, adminPassword);
 
   if (!emailOk || !passOk) {
-    // TEMPORARY: emailOk/passOk help diagnose a failing login (which field
-    // mismatches the Vercel env var). Remove once sign-in works.
-    res.status(401).json({ error: "Invalid email or password", emailOk, passOk });
+    res.status(401).json({ error: "Invalid email or password" });
     return;
   }
 
