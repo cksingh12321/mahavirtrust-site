@@ -353,6 +353,24 @@ a:hover { color: var(--saffron); }
 .badge-draft { background: #fef3c7; color: #92400e; }
 .badge-pub { background: var(--success-bg); color: var(--success); }
 
+.img-controls {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: 8px;
+}
+.btn-upload { font-size: 0.82rem; padding: 6px 12px; }
+.img-status { font-size: 0.78rem; color: var(--ink-soft); }
+.img-preview:not(:empty) { margin-top: 10px; }
+.img-thumb {
+  max-width: 200px;
+  max-height: 130px;
+  border-radius: 8px;
+  border: 1px solid var(--border);
+  display: block;
+  object-fit: cover;
+}
+
 .field {
   margin-bottom: 14px;
 }

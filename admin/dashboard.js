@@ -228,6 +228,20 @@
   // ---- rendering ---------------------------------------------------
   function fieldControl(field, value) {
     const v = value == null ? field.default || "" : value;
+    if (field.name === "image") {
+      const preview = v
+        ? `<img src="${esc(v)}" alt="" class="img-thumb" onerror="this.style.display='none'">`
+        : "";
+      return `<div class="img-field">
+        <input type="text" data-name="${field.name}" value="${esc(v)}" placeholder="Upload below, or paste an image URL">
+        <div class="img-controls">
+          <input type="file" accept="image/*" class="img-file" hidden>
+          <button type="button" class="btn btn-ghost btn-upload">⬆ Upload photo</button>
+          <span class="img-status"></span>
+        </div>
+        <div class="img-preview">${preview}</div>
+      </div>`;
+    }
     if (field.type === "select") {
       const opts = field.options
         .map(
@@ -481,6 +495,12 @@
       saveEntry(card, "published");
       return;
     }
+    if (ev.target.closest(".btn-upload")) {
+      const fieldEl = ev.target.closest(".img-field");
+      const fileInput = fieldEl && fieldEl.querySelector(".img-file");
+      if (fileInput) fileInput.click();
+      return;
+    }
     if (ev.target.closest(".entry-head")) {
       card.classList.toggle("is-open");
     }
@@ -495,6 +515,84 @@
       if (h3) h3.textContent = el.value.trim() || "Untitled";
     }
   });
+
+  // A photo was chosen -> downscale, upload, fill the URL field
+  entriesEl.addEventListener("change", (ev) => {
+    const t = ev.target;
+    if (t && t.classList && t.classList.contains("img-file")) {
+      handleImageUpload(t);
+    }
+  });
+
+  // ---- image upload ------------------------------------------------
+  // Shrink big photos in the browser before upload: keeps the repo small
+  // and stays well under Vercel's request-size limit.
+  function downscaleImage(file, maxDim = 1600, quality = 0.85) {
+    return new Promise((resolve, reject) => {
+      const img = new Image();
+      const url = URL.createObjectURL(file);
+      img.onload = () => {
+        URL.revokeObjectURL(url);
+        let { width, height } = img;
+        const scale = Math.min(1, maxDim / Math.max(width, height));
+        width = Math.max(1, Math.round(width * scale));
+        height = Math.max(1, Math.round(height * scale));
+        const canvas = document.createElement("canvas");
+        canvas.width = width;
+        canvas.height = height;
+        canvas.getContext("2d").drawImage(img, 0, 0, width, height);
+        resolve(canvas.toDataURL("image/jpeg", quality));
+      };
+      img.onerror = () => {
+        URL.revokeObjectURL(url);
+        reject(new Error("That file isn't a readable image."));
+      };
+      img.src = url;
+    });
+  }
+
+  function makeFilename(original) {
+    const base =
+      String(original || "photo")
+        .replace(/\.[^.]+$/, "")
+        .toLowerCase()
+        .replace(/[^a-z0-9]+/g, "-")
+        .replace(/^-+|-+$/g, "")
+        .slice(0, 40) || "photo";
+    return `${base}-${Date.now().toString(36)}.jpg`;
+  }
+
+  async function handleImageUpload(fileInput) {
+    const file = fileInput.files && fileInput.files[0];
+    if (!file) return;
+    const fieldEl = fileInput.closest(".img-field");
+    const statusEl = fieldEl.querySelector(".img-status");
+    const urlInput = fieldEl.querySelector('input[data-name="image"]');
+    const previewEl = fieldEl.querySelector(".img-preview");
+    try {
+      statusEl.textContent = "Processing…";
+      const dataUrl = await downscaleImage(file);
+      const base64 = dataUrl.split(",")[1];
+      statusEl.textContent = "Uploading…";
+      const r = await fetch("/api/admin-upload", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ filename: makeFilename(file.name), contentBase64: base64 }),
+      });
+      if (r.status === 401) return gotoLogin();
+      const data = await r.json().catch(() => ({}));
+      if (!r.ok) throw new Error(data.error || `Upload failed (${r.status})`);
+      urlInput.value = data.path;
+      previewEl.innerHTML = `<img src="${esc(data.path)}" alt="" class="img-thumb">`;
+      statusEl.textContent = "✓ Uploaded";
+      toast("Photo uploaded — now Save draft or Publish the entry", "success");
+    } catch (e) {
+      statusEl.textContent = "";
+      toast(e.message || "Upload failed", "error");
+    } finally {
+      fileInput.value = "";
+    }
+  }
 
   // ---- boot --------------------------------------------------------
   async function init() {
